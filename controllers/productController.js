@@ -55,38 +55,74 @@ app.post("/getOrCreateCart", (req, res) => {
 
     let data = req.body;
     let idUser = data.id;
-    
+    let id = data.prod._id;
+    let shoppingCart;
 
-    let shoppingCart = new ShoppingCart({
-        products: [
-            {
-                prod:
-                {
-                    _id:data.prod._id,
-                    productName: data.prod.productName,
-                    productDescription: data.prod.productDescription,
-                    productPrice: data.prod.productPrice,
-                    productQuatity: data.prod.productQuatity,
-                    idSeller: data.prod.idSeller
-                },
-                quantite: data.quantite
-
-            }
-        ]
-    })
     console.log(shoppingCart);
-    shoppingCart.save().then(() => {
+    if (idUser === "") {
+        shoppingCart = new ShoppingCart({
+            products: [
+                {
+                    prod:
+                    {
+                        _id: data.prod._id,
+                        productName: data.prod.productName,
+                        productDescription: data.prod.productDescription,
+                        productPrice: data.prod.productPrice,
+                        productQuatity: data.prod.productQuatity,
+                        idSeller: data.prod.idSeller
+                    },
+                    quantite: data.quantite
 
-
-        res.status(200).send(shoppingCart._id);
-
-    }).catch((err) => {
-        res.status(400).send({
-            message: "erreur : " + err
+                }
+            ]
         })
-    });
 
-})
+        shoppingCart.save().then(() => {
 
+
+            res.status(200).send(shoppingCart);
+
+        }).catch((err) => {
+            res.status(400).send({
+                message: "erreur : " + err
+            })
+        });
+
+    }
+    else {
+        ShoppingCart.findOne({ idUser: idUser }).then((shoppingCartArray) => {
+            for (let i = 0; i < shoppingCartArray.products.length; i++) {
+                if (shoppingCartArray.products[i].prod._id == id) {
+                    shoppingCartArray.products[i].quantite++;
+                }
+            }
+            if (i == shoppingCartArray.products.length) {
+                shoppingCartArray.products.push({
+                    prod:
+                    {
+                        _id: data.prod._id,
+                        productName: data.prod.productName,
+                        productDescription: data.prod.productDescription,
+                        productPrice: data.prod.productPrice,
+                        productQuatity: data.prod.productQuatity,
+                        idSeller: data.prod.idSeller
+                    },
+                    quantite: data.quantite
+
+                })
+            }
+            res.status(200).send(shoppingCart);
+            
+        }).catch((e) => {
+            res.status(400).send({
+                message: "erreur : " + e
+            })
+
+        })
+    }
+
+
+});
 module.exports = app;
 /**/

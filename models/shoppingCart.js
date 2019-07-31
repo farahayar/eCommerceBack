@@ -2,8 +2,13 @@ const mongooose = require('mongoose');
 const validator = require('validator');
 const { Product } = require('../models/product')
 
-const shoppingCartSchema =new  mongooose.Schema({
+const shoppingCartSchema = new mongooose.Schema({
 
+    idUser: {
+        type: String,
+        require: true,
+        trim: true,
+    },
     addedDate:
     {
         type: Date,
@@ -14,47 +19,47 @@ const shoppingCartSchema =new  mongooose.Schema({
     },
     products: [
         {
-            prod:{
+            prod: {
 
                 productName:
                 {
                     type: String,
                     require: true,
                     trim: true,
-                    
+
                 },
                 productDescription:
                 {
                     type: String,
                     require: true,
                     trim: true,
-                    
+
                 },
                 productPrice:
                 {
                     type: String,
                     require: true,
                     trim: true,
-                    
+
                 },
                 productQuatity:
                 {
                     type: String,
                     require: true,
                     trim: true,
-                    
+
                 },
                 idSeller:
                 {
                     type: String,
                     require: true,
                     trim: true,
-                    
+
                 }
-               
-            
+
+
             },
-            quantite:String
+            quantite: String
         }
     ]
 
