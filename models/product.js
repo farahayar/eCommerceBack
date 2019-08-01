@@ -38,6 +38,11 @@ const productSchema = new mongooose.Schema({
         require: true,
         trim: true,
 
+    },
+    photoUrl:{
+        type: String,
+        require: true,
+        trim: true,
     }
 
 
